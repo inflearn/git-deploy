@@ -1,0 +1,20 @@
+{
+  "name": "inflearn-git-deploy",
+  "version": "1.0.1",
+  "description": "Helper script for git deploy workflow.",
+  "main": "git-deploy",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git+https://github.com/inflearn/git-deploy.git",
+  "keywords": [
+    "git",
+    "script"
+  ],
+  "author": "Joshua Jung <wbqdinno@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inflearn/git-deploy/issues"
+  },
+  "homepage": "https://github.com/inflearn/git-deploy#readme"
+}
