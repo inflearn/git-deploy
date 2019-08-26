@@ -1,4 +1,81 @@
 #!/bin/bash
 
+# Welcom screen
+
 # Script to deploy to test branch
 
+usage() {
+    err_msg "사용법: git-deploy [--dev]"
+    exit 1
+}
+
+exit_on_failed() { 
+    echo "$@";
+    exit 1; 
+}
+
+err_msg() { echo "$@" ;} >&2
+
+# long 옵션 처리
+A=""
+is_dev=0
+while true; do
+    [ $# -eq 0 ] && break
+    case $1 in
+        --dev)
+            is_dev=1
+            shift; continue
+            ;;
+        --*) 
+            err_msg "알 수 없는 옵션: $1"
+            usage;
+            ;;
+    esac
+
+    A=$A$([ -n "$A" ] && echo -e "\a")$1
+    shift
+done
+
+# Delete 'test' branch with -f option
+
+echo "git branch -D test"
+git branch -D test
+
+# Checkout current branch or 'dev' if --dev option has been given
+
+git_current_branch=$(git branch --show-current)
+if [ $is_dev -eq 1 ]
+    then
+        echo "git checkout dev"
+        git checkout dev || exit_on_failed "오류가 발생했습니다."
+    else
+        echo "git checkout $git_current_branch"
+        git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
+fi
+
+# Create new branch 'test' and checkout to this
+
+echo "git checkout -b test"
+git checkout -b test || exit_on_failed "오류가 발생했습니다."
+
+# Set upstream branch to 'origin test'
+
+echo "git branch --set-upstream-to=origin/test"
+git branch --set-upstream-to=origin/test || exit_on_failed "오류가 발생했습니다."
+
+# Push local 'test' branch onto the remote 'test' branch with -f option
+
+echo "git push -f"
+git push -f || exit_on_failed "오류가 발생했습니다."
+
+# Checkout back to initial branch 
+
+echo "git checkout $git_current_branch"
+git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
+
+# Delete 'test' branch
+
+echo "git branch -D test"
+git branch -D test || exit_on_failed "오류가 발생했습니다."
+
+# Bye!
