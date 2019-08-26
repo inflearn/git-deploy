@@ -2,6 +2,17 @@
 
 # Welcom screen
 
+echo "                                                               ";
+echo "██╗███╗   ██╗███████╗██╗     ███████╗ █████╗ ██████╗ ███╗   ██╗";
+echo "██║████╗  ██║██╔════╝██║     ██╔════╝██╔══██╗██╔══██╗████╗  ██║";
+echo "██║██╔██╗ ██║█████╗  ██║     █████╗  ███████║██████╔╝██╔██╗ ██║";
+echo "██║██║╚██╗██║██╔══╝  ██║     ██╔══╝  ██╔══██║██╔══██╗██║╚██╗██║";
+echo "██║██║ ╚████║██║     ███████╗███████╗██║  ██║██║  ██║██║ ╚████║";
+echo "╚═╝╚═╝  ╚═══╝╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝";
+echo "                                                               ";
+echo "Git deploy 스크립트";
+echo ""
+
 # Script to deploy to test branch
 
 usage() {
@@ -38,6 +49,7 @@ done
 
 # Delete 'test' branch with -f option
 
+echo "🗑 test 브랜치를 삭제합니다"
 echo "git branch -D test"
 git branch -D test
 
@@ -48,9 +60,11 @@ echo ""
 git_current_branch=$(git branch --show-current)
 if [ $is_dev -eq 1 ]
     then
+        echo "🦏 dev 브랜치로 전환합니다"
         echo "git checkout dev"
         git checkout dev || exit_on_failed "오류가 발생했습니다."
     else
+        echo "🏇🏾 $git_current_branch 브랜치로 전환합니다"
         echo "git checkout $git_current_branch"
         git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
 fi
@@ -59,6 +73,7 @@ echo ""
 
 # Create new branch 'test' and checkout to this
 
+echo "♻️  test 브랜치를 생성합니다"
 echo "git checkout -b test"
 git checkout -b test || exit_on_failed "오류가 발생했습니다."
 
@@ -66,6 +81,7 @@ echo ""
 
 # Set upstream branch to 'origin test'
 
+echo "🍽️  test 브랜치의 업스트림을 origin/test로 설정합니다"
 echo "git branch --set-upstream-to=origin/test"
 git branch --set-upstream-to=origin/test || exit_on_failed "오류가 발생했습니다."
 
@@ -73,6 +89,7 @@ echo ""
 
 # Push local 'test' branch onto the remote 'test' branch with -f option
 
+echo "🛌🏻 로컬 test 브랜치를 리모트로 강제 푸시합니다"
 echo "git push -f"
 git push -f || exit_on_failed "오류가 발생했습니다."
 
@@ -80,6 +97,7 @@ echo ""
 
 # Checkout back to initial branch 
 
+echo "👨🏽‍🦲 시작 브랜치로 돌아옵니다"
 echo "git checkout $git_current_branch"
 git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
 
@@ -87,9 +105,12 @@ echo ""
 
 # Delete 'test' branch
 
+echo "🏄🏿‍♀️ test 브랜치를 삭제합니다"
 echo "git branch -D test"
 git branch -D test || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
 # Bye!
+
+echo "👨🏼‍💻 안녕!"
