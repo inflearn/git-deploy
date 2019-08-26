@@ -41,6 +41,8 @@ done
 echo "git branch -D test"
 git branch -D test
 
+echo ""
+
 # Checkout current branch or 'dev' if --dev option has been given
 
 git_current_branch=$(git branch --show-current)
@@ -53,29 +55,41 @@ if [ $is_dev -eq 1 ]
         git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
 fi
 
+echo ""
+
 # Create new branch 'test' and checkout to this
 
 echo "git checkout -b test"
 git checkout -b test || exit_on_failed "오류가 발생했습니다."
+
+echo ""
 
 # Set upstream branch to 'origin test'
 
 echo "git branch --set-upstream-to=origin/test"
 git branch --set-upstream-to=origin/test || exit_on_failed "오류가 발생했습니다."
 
+echo ""
+
 # Push local 'test' branch onto the remote 'test' branch with -f option
 
 echo "git push -f"
 git push -f || exit_on_failed "오류가 발생했습니다."
+
+echo ""
 
 # Checkout back to initial branch 
 
 echo "git checkout $git_current_branch"
 git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
 
+echo ""
+
 # Delete 'test' branch
 
 echo "git branch -D test"
 git branch -D test || exit_on_failed "오류가 발생했습니다."
+
+echo ""
 
 # Bye!
