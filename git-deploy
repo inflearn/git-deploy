@@ -72,7 +72,7 @@ if [ $is_dev -eq 1 ]
         echo "git checkout dev"
         git checkout dev || exit_on_failed "오류가 발생했습니다."
     else
-        echo "🏇🏾 $git_current_branch 브랜치로 전환합니다"
+        echo "🏇🏾 $git_current_branch 브랜치로 전환합니다."
         echo "git checkout $git_current_branch"
         git checkout "$git_current_branch" || exit_on_failed "오류가 발생했습니다."
 fi
@@ -81,7 +81,7 @@ echo ""
 
 # Create new branch 'test' and checkout to this
 
-echo "♻️  $deploy_branch 브랜치를 생성합니다."
+echo "🆕 $deploy_branch 브랜치를 생성합니다."
 echo "git checkout -b $deploy_branch"
 git checkout -b $deploy_branch || exit_on_failed "오류가 발생했습니다."
 
@@ -89,7 +89,7 @@ echo ""
 
 # Push local branch onto the remote branch with -f option
 
-echo "🛌🏻 로컬 $deploy_branch 브랜치를 리모트로 강제 푸시합니다"
+echo "🆙 로컬 $deploy_branch 브랜치를 리모트로 강제 푸시합니다."
 echo "git push -f origin $deploy_branch"
 git push -f origin $deploy_branch || exit_on_failed "오류가 발생했습니다."
 
@@ -97,15 +97,15 @@ echo ""
 
 # Checkout back to initial branch 
 
-echo "👨🏽‍🦲 시작 브랜치로 돌아옵니다"
+echo "🆗 시작 브랜치로 돌아옵니다."
 echo "git checkout $git_current_branch"
-git checkout $git_current_branch || exit_on_failed "오류가 발생했습니다."
+git checkout "$git_current_branch" || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
 # Delete 'test' branch
 
-echo "🏄🏿‍♀️ $deploy_branch 브랜치를 삭제합니다"
+echo "🆓 $deploy_branch 브랜치를 삭제합니다."
 echo "git branch -D $deploy_branch"
 git branch -D "$deploy_branch" || exit_on_failed "오류가 발생했습니다."
 
@@ -113,4 +113,4 @@ echo ""
 
 # Bye!
 
-echo "👨🏼‍💻 안녕!"
+echo "👽 안녕!"
