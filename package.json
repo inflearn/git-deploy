@@ -1,6 +1,6 @@
 {
   "name": "inflearn-git-deploy",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Helper script for git deploy workflow.",
   "main": "git-deploy",
   "scripts": {
