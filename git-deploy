@@ -32,13 +32,12 @@ err_msg() { echo "$@" ;} >&2
 # long 옵션 처리
 A=""
 is_dev=0
-deploy_branch=""
+deploy_branch="test"
 while true; do
     [ $# -eq 0 ] && break
     case $1 in
         --dev)
             is_dev=1
-            deploy_branch="test"
             shift; continue
             ;;
         --rc)
