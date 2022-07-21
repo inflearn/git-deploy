@@ -2,18 +2,14 @@
 
 ## 사용 방법
 
-`git-deploy [--dev|--rc]`
+`git-deploy [-T | --include-test-branch]`
 
 ## 옵션 설명
 
-### 무옵션
+### 옵션 미선택시
 
-현재 브랜치에서 test 브랜치로 배포합니다.
+현재 브랜치에서 test 브랜치로 push 합니다.
 
-### `[--dev]`
+### `[-T | --include-test-branch]`
 
-dev 브랜치로 전환한 뒤 test 브랜치로 배포합니다.
-
-### `[--rc]`
-
-현재 브랜치에서 rc 브랜치로 배포합니다.
+현재 브랜치를 test 브랜치 위로 리베이스한 뒤 test 브랜치로 push 합니다.
