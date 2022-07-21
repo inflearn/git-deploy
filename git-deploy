@@ -18,33 +18,36 @@ echo ""
 # Script to deploy to test branch
 
 usage() {
-    err_msg "사용법: git-deploy [--dev|--rc]"
+    err_msg "사용법: git-deploy [-h | --help] [-T | --include-test-branch]"
     exit 1
 }
 
-exit_on_failed() { 
+exit_on_failed() {
     echo "$@";
-    exit 1; 
+    exit 1;
 }
 
 err_msg() { echo "$@" ;} >&2
 
 # long 옵션 처리
 A=""
-is_dev=0
-deploy_branch="test"
+is_override=0
+local_deploy_branch="test"
+remote_deploy_branch="origin/test"
+working_branch=$(git branch --show-current)
 while true; do
     [ $# -eq 0 ] && break
     case $1 in
-        --dev)
-            is_dev=1
+        --include-test-branch)
+            is_override=1
+            echo "현재 브랜치를 test 브랜치 위로 리베이스한 뒤 test 브랜치로 push 합니다."
             shift; continue
             ;;
-        --rc)
-            deploy_branch="rc"
+        --help)
+            usage
             shift; continue
             ;;
-        --*) 
+        --*)
             err_msg "알 수 없는 옵션: $1"
             usage;
             ;;
@@ -54,59 +57,73 @@ while true; do
     shift
 done
 
-# Delete 'test' branch with -f option
+# $@' 값에 short 옵션만 남기기
+IFS=$(echo -e "\a"); set -f; set -- $A; set +f; IFS=$(echo -e " \n\t")
 
-echo "🗑 $deploy_branch 브랜치를 삭제합니다."
-echo "git branch -D $deploy_branch"
-git branch -D $deploy_branch
+# short 옵션 처리
+while getopts "Th" opt; do
+    case $opt in
+        T)
+            is_override=1
+            usage
+            echo "현재 브랜치를 test 브랜치 위로 리베이스한 뒤 test 브랜치로 push 합니다."
+            ;;
+        h)
+            usage
+            ;;
+        *)
+            # err_msg "알 수 없는 옵션: -$OPTARG"
+            usage
+            ;;
+    esac
+done
 
-echo ""
+shift $(( OPTIND - 1 ))
 
-# Checkout current branch or 'dev' if --dev option has been given
+# Rebase $working_branch onto $remote_deploy_branch branch when --include-test-branch option is specified
+if [ $is_override -eq 1 ]
+  then
+  echo "현재 브랜치($working_branch)를 $remote_deploy_branch 브랜치 위로 리베이스합니다."
+  echo "git rebase $remote_deploy_branch"
+  git rebase $remote_deploy_branch
 
-git_current_branch=$(git branch --show-current)
-if [ $is_dev -eq 1 ]
-    then
-        echo "🦏 dev 브랜치로 전환합니다."
-        echo "git checkout dev"
-        git checkout dev || exit_on_failed "오류가 발생했습니다."
-    else
-        echo "🏇🏾 $git_current_branch 브랜치로 전환합니다."
-        echo "git checkout $git_current_branch"
-        git checkout "$git_current_branch" || exit_on_failed "오류가 발생했습니다."
+  echo ""
 fi
+
+# Delete $local_deploy_branch with -f option
+echo "🗑 로컬 $local_deploy_branch 브랜치를 삭제합니다."
+echo "git branch -D $local_deploy_branch"
+git branch -D $local_deploy_branch
 
 echo ""
 
 # Create new branch 'test' and checkout to this
-
-echo "🆕 $deploy_branch 브랜치를 생성합니다."
-echo "git checkout -b $deploy_branch"
-git checkout -b $deploy_branch || exit_on_failed "오류가 발생했습니다."
+echo "🆕 $local_deploy_branch 브랜치를 생성합니다."
+echo "git checkout -b $local_deploy_branch"
+git checkout -b $local_deploy_branch || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
 # Push local branch onto the remote branch with -f option
-
-echo "🆙 로컬 $deploy_branch 브랜치를 리모트로 강제 푸시합니다."
-echo "git push -f origin $deploy_branch"
-git push -f origin $deploy_branch || exit_on_failed "오류가 발생했습니다."
+echo "🆙 로컬 $local_deploy_branch 브랜치를 리모트로 강제 푸시합니다."
+echo "git push -f origin $local_deploy_branch"
+git push -f origin $local_deploy_branch || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
-# Checkout back to initial branch 
+# Checkout back to initial branch
 
 echo "🆗 시작 브랜치로 돌아옵니다."
-echo "git checkout $git_current_branch"
-git checkout "$git_current_branch" || exit_on_failed "오류가 발생했습니다."
+echo "git checkout $working_branch"
+git checkout "$working_branch" || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
 # Delete 'test' branch
 
-echo "🆓 $deploy_branch 브랜치를 삭제합니다."
-echo "git branch -D $deploy_branch"
-git branch -D "$deploy_branch" || exit_on_failed "오류가 발생했습니다."
+echo "🆓 $local_deploy_branch 브랜치를 삭제합니다."
+echo "git branch -D $local_deploy_branch"
+git branch -D "$local_deploy_branch" || exit_on_failed "오류가 발생했습니다."
 
 echo ""
 
