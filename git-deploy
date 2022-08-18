@@ -88,16 +88,16 @@ git branch -D $local_deploy_branch
 echo ""
 
 # Create new branch 'test' and checkout to this
-echo "🆕 $local_deploy_branch 브랜치를 생성합니다."
+echo "$working_branch 브랜치에서 🆕 $local_deploy_branch 브랜치를 체크아웃합니다."
 echo "git checkout -b $local_deploy_branch"
 git checkout -b $local_deploy_branch || exit_on_failed "오류가 발생했습니다. 문제를 해결하고 다시 시도하거나 수동으로 진행해주세요"
 
 echo ""
 
-# Rebase $working_branch onto $remote_deploy_branch branch when --include-test-branch option is specified
+# Rebase $local_deploy_branch onto $remote_deploy_branch branch when --include-test-branch option is specified
 if [ $is_override -eq 1 ]
   then
-  echo "현재 브랜치($working_branch)를 $remote_deploy_branch 브랜치 위로 리베이스합니다."
+  echo "현재 브랜치($local_deploy_branch)를 $remote_deploy_branch 브랜치 위로 리베이스합니다."
   echo "git rebase $remote_deploy_branch"
   git rebase $remote_deploy_branch || exit_on_failed "오류가 발생했습니다. 문제를 해결하고 다시 시도하거나 수동으로 진행해주세요"
 
