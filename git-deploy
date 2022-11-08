@@ -98,8 +98,9 @@ echo ""
 if [ $is_override -eq 1 ]
   then
   echo "현재 브랜치($local_deploy_branch)를 $remote_deploy_branch 브랜치 위로 리베이스합니다."
-  echo "git rebase $remote_deploy_branch"
+  echo "git fetch"
   git fetch
+  echo "git rebase $remote_deploy_branch"
   git rebase $remote_deploy_branch || exit_on_failed "오류가 발생했습니다. 문제를 해결하고 다시 시도하거나 수동으로 진행해주세요"
 
   echo ""
